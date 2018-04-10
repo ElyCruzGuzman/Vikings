@@ -65,7 +65,8 @@ function createViking(num){
 	}
 }
 
-var Saxon = function(health, strength){
+var Saxon = function(name, health, strength){
+	this.name = name;
 	this.health = Math.floor(Math.random() * (50-30)) + 30;
 	this.strength = Math.floor((Math.random() * (15-10)) + 10);
 }
@@ -79,7 +80,7 @@ var randomIndexSaxons = Math.floor(Math.random() * (maxIndexSaxons + 1));
 
 function createSaxon(num){
 	for(i=0; i < num; i++){
-		saxons[i] = new Saxon;
+		saxons[i] = new Saxon("Poor Saxon " + i);
 			// console.log(saxons);
 	}
 }
@@ -89,11 +90,33 @@ console.log('Los vikingos entran a la city: \n' + vikings[0].warcry);
 
 
 var battle = new Pit(vikings,saxons);
-
-// battle.viking = vikings[randomIndexVikings];
-// battle.saxon = saxons[randomIndexSaxons];
+battle.viking = vikings[randomIndexVikings];
+battle.saxon = saxons[randomIndexSaxons];
 
 console.log('\n ----------------------- \n Los primeros oponentes son: \n ----------------------- \n');
-console.log(vikings[randomIndexVikings].name + ' -- VS -- ' + 'Saxons ' + randomIndexSaxons);
+console.log(battle.viking.name + ' -- VS -- ' + battle.saxon.name);
 
-// battle.fight
+turn = Math.floor(Math.random() * (8-5)) + 5;
+var ronda = 1;
+
+battle.fight = function(){
+	while(vikings.length !== 0 && saxons.length !== 0 && ronda <= turn){
+		if(this.viking.health > 0 && this.saxon.health > 0){
+			this.saxon.health = this.saxon.health - this.viking.strength;
+			this.viking.health = this.viking.health - this.saxon.strength;
+			console.log('\n --- Ronda nº ' + ronda + '--- \n')
+			console.log(this.viking.name + ' ha causado ' + this.viking.strength + ' puntos de daño');
+			console.log(this.saxon.name + ' su salud es ' + this.saxon.health);
+			console.log(this.saxon.name + ' ha causado ' + this.saxon.strength + ' puntos de daño');
+			console.log(this.viking.name + ' su salud es ' + this.viking.health);
+			}
+		ronda++;
+	}
+	if (this.viking.health < this.saxon.strength) {
+			console.log ('---- ' + this.viking.name + ' ha muerto ----');
+			console.log ('---- ' + this.saxon.name + ' ha ganado ----');
+		} else if (this.saxon.health < this.viking.strength ) {
+			console.log ('----- ' + this.saxon.name + ' ha muerto -----');
+			console.log ('---- ' + this.viking.name + ' ha ganado ----');
+		}
+}
